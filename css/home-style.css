@@ -131,6 +131,12 @@ header .logo {
   opacity: 0;
   transition: 5s;
 }
+@media (max-width:480px) {
+  #preloader .text{
+    font-size: 25px;
+
+  }
+}
 
 /* --------------------------------preloader end------------- */
 
