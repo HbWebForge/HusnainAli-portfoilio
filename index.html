@@ -10,64 +10,63 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
     integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
     crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/index.min.js"></script>
 </head>
 
 <body>
   <!-- -----------------------pre loader start-------------------------- -->
-  <div id="preloader">
+  <!-- <div id="preloader">
       <div class="text loading active" data-text="Loading......">
         Loading......
       </div>
-      <div class="text welcome" data-text="Welcome to HB portfolio">
-        Welcome to  HB portfolio
-      </div>
-    </div>
+    </div> -->
   <!-- --------------------------pre loader end------------- -->
   <!-- ------------------------------header start--------------------- -->
-  <header>
-    <div class="menu-btn" id="menuBtn">
-      <div class="circle-text">
-        <!-- <span>MENU </span> -->
+  <header class="navbar-header">
+
+    <nav class="navbar">
+      <!-- Logo -->
+      <div class="navbar-logo">
+        <img src="/imgs/hb-log.png" alt="HB Logo" class="logo-img" />
+        <!-- <span class="logo-text"></span> -->
       </div>
 
-      <div class="icon">
+      <!-- Hamburger Menu Button -->
+      <div class="hamburger-menu" id="hamburgerMenu">
+        <span></span>
         <span></span>
         <span></span>
       </div>
-    </div>
 
-    <div class="menu-overlay" id="menuOverlay">
-      <ul>
-        <li><a href="#">home</a></li>
-        <label for="about-me">
-          <li><a href="#about-me">about</a></li>
-        </label>
-        <li><a href="#">skills</a></li>
-        <li><a href="#">projects</a></li>
-        <li><a href="#">contact</a></li>
+      <!-- Navigation Menu -->
+      <ul class="nav-menu" id="navMenu">
+        <li class="nav-item"><a href="#home" class="nav-link active">Home</a></li>
+        <li class="nav-item"><a href="#about-me" class="nav-link">About</a></li>
+        <li class="nav-item"><a href="#services" class="nav-link">Services</a></li>
+        <li class="nav-item"><a href="#projects" class="nav-link">Projects</a></li>
+        <li class="nav-item"><a href="#contact-me" class="nav-link">Contact</a></li>
       </ul>
-    </div>
-    <div class="logo">
-      <img src="/imgs/hb-log.png" alt="" />
-    </div>
+    </nav>
   </header>
   <!-- -------------------------------header end------------------- -->
   <main>
 
     <!-- --------------------tagline start---------------------------- -->
-    <div class="tagline-section">
+    <div class="tagline-section" id="home">
+      
       <div class="tagline-content">
         <h2>
           frontend & wordpress Developer building fast, scalable web experience on the path to full stack excellence.
         </h2>
         <div class="tagline-btn">
-          <a href="#projects" class="view-all-btn tag-btn ">
+          <a href="#projects" class=" tag-btn btn-right-move ">
             <span>View work</span>
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M5 12h14M12 5l7 7-7 7"></path>
             </svg>
           </a>
-          <a href="#contact-me" class="view-all-btn tag-btn ">
+          <a href="https://wa.me/+923442005467?text=Hi%20Husnain!%20I%27m%20interested%20in%20your%20web%20development%20services.%20Can%20we%20discuss%20my%20project%20requirements%3F"
+            target="_blank" class="view-all-btn tag-btn ">
             <span>Hire me</span>
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M5 12h14M12 5l7 7-7 7"></path>
@@ -82,9 +81,9 @@
     </div>
     <!-- ---------------------------------------tagline section end -------------------- -->
 
-   <!-- ---------------------------why choose me section start---------------------------- -->
+    <!-- ---------------------------why choose me section start---------------------------- -->
     <section class="why-choose-section sections-pd bg-black">
-      <div class="word-row-section word-row-white"><span>Why Me</span></div>
+
       <h3 class="about-title">Why Choose Me?</h3>
 
       <div class="why-choose-container">
@@ -185,9 +184,9 @@
       </div>
     </section>
     <!-- ---------------------------why choose me section end---------------------------- -->
-      <!-- ---------------------------Services Section start---------------------------- -->
-    <section class="services-section sections-pd bg-black">
-      <div class="word-row-section word-row-white"><span>Services</span></div>
+    <!-- ---------------------------Services Section start---------------------------- -->
+    <section class="services-section sections-pd bg-black" id="services" >
+
       <h3 class="about-title">My Services</h3>
       <p class="services-subtitle">
         I offer comprehensive web solutions tailored to your business needs
@@ -220,7 +219,7 @@
 
             <div class="service-stats">
               <div class="stat">
-                <span class="stat-number">80%</span>
+                <span class="stat-number">70%</span>
                 <span class="stat-label">Proficiency</span>
               </div>
               <div class="stat">
@@ -229,7 +228,8 @@
               </div>
             </div>
             <label for="contact_me">
-              <a href="#contact-me" class="service-btn">Get Started <i class="fas fa-arrow-right"></i></a>
+              <a href="https://wa.me/+923442005467?text=Hi%20Husnain!%20I%27m%20interested%20in%20your%20Frontend%20Development%20services.%20Can%20we%20discuss%20my%20project%3F"
+                target="_blank" class="service-btn">Get Started <i class="fas fa-arrow-right"></i></a>
             </label>
           </div>
         </div>
@@ -263,16 +263,17 @@
 
             <div class="service-stats">
               <div class="stat">
-                <span class="stat-number">80%</span>
+                <span class="stat-number">70%</span>
                 <span class="stat-label">Proficiency</span>
               </div>
               <div class="stat">
-                <span class="stat-number">10+</span>
+                <span class="stat-number">5+</span>
                 <span class="stat-label">Websites</span>
               </div>
             </div>
 
-            <a href="#contact-me" class="service-btn">Get Started <i class="fas fa-arrow-right"></i></a>
+            <a href="https://wa.me/+923442005467?text=Hi%20Husnain!%20I%27m%20interested%20in%20your%20WordPress%20Development%20services.%20Can%20we%20discuss%20my%20project%3F"
+              target="_blank" class="service-btn">Get Started <i class="fas fa-arrow-right"></i></a>
           </div>
         </div>
 
@@ -310,7 +311,7 @@
 
             <div class="service-stats">
               <div class="stat">
-                <span class="stat-number">70%</span>
+                <span class="stat-number">60%</span>
                 <span class="stat-label">Proficiency</span>
               </div>
               <div class="stat">
@@ -319,15 +320,16 @@
               </div>
             </div>
 
-            <a href="#contact-me" class="service-btn">Get Started <i class="fas fa-arrow-right"></i></a>
+            <a href="https://wa.me/+923442005467?text=Hi%20Husnain!%20I%27m%20interested%20in%20your%20UI/UX%20Design%20services.%20Can%20we%20discuss%20my%20project%3F"
+              target="_blank" class="service-btn">Get Started <i class="fas fa-arrow-right"></i></a>
           </div>
         </div>
       </div>
     </section>
     <!-- ---------------------------Services Section end---------------------------- -->
-      <!-- ---------------------------projects section start---------------------------- -->
-    <section  id="projects" class="projects-section sections-pd bg-black">
-      <div class="word-row-section word-row-white"><span>Projects</span></div>
+    <!-- ---------------------------projects section start---------------------------- -->
+    <section id="projects" class="projects-section sections-pd bg-black">
+
       <h3 class="about-title">My Projects</h3>
 
       <!-- Filter Buttons -->
@@ -335,9 +337,9 @@
         <button class="filter-btn active" data-filter="all">
           All Projects
         </button>
-        <button class="filter-btn" data-filter="frontend">Frontend</button>
-        <button class="filter-btn" data-filter="wordpress">WordPress</button>
-        <button class="filter-btn" data-filter="fullstack">Full Stack</button>
+        <button class=" filter-btn " data-filter="frontend">Frontend</button>
+        <button class=" filter-btn " data-filter="wordpress">WordPress</button>
+        <!-- <button class=" filter-btn  btn-right-move " data-filter="fullstack">Full Stack</button> -->
       </div>
 
       <!-- Projects Grid with 3D Flip Cards -->
@@ -350,7 +352,7 @@
               <img src="/imgs/FD.jpg" alt="Project 1" />
               <div class="project-overlay">
                 <h4>E-Commerce Platform</h4>
-                <p class="tech-stack">  wordpress • woocommerce • elementor</p>
+                <p class="tech-stack"> wordpress • woocommerce • elementor</p>
               </div>
             </div>
             <!-- Back Side -->
@@ -437,14 +439,14 @@
               <img src="/imgs/ui-ux-design.jpg" alt="Project 3" />
               <div class="project-overlay">
                 <h4>Personal Portfolio</h4>
-                <p class="tech-stack">  HTML5 • CSS3 • JAVASCRIPT</p>
+                <p class="tech-stack"> HTML5 • CSS3 • JAVASCRIPT</p>
               </div>
             </div>
             <div class="card-back">
               <div class="back-content">
                 <h3>Personal Portfolio</h3>
                 <p>
-                    Personal Portfolio
+                  Personal Portfolio
                 </p>
                 <div class="project-meta">
                   <span class="tag">HTML5</span>
@@ -528,192 +530,10 @@
     </section>
     <!-- -------------------------projects section end----------------------------  -->
 
-    
-    <!-- ---------------------------skills section start---------------------------- -->
-    <section class="skills-section sections-pd bg-black">
-      <div class="word-row-section word-row-white"><span>Skills</span></div>
-      <h3 class="about-title">My Technical Skills</h3>
-
-      <!-- Frontend Skills -->
-      <div class="skills-container">
-        <div class="skill-category">
-          <div class="category-header">
-            <div class="category-icon">
-              <i class="fas fa-laptop-code"></i>
-            </div>
-            <h2>Frontend Development</h2>
-            <p>Building modern, responsive interfaces</p>
-          </div>
-
-          <div class="skills-timeline">
-            <div class="skill-item" data-skill-level="80">
-              <div class="skill-step">
-                <div class="step-number">01</div>
-                <div class="step-content">
-                  <h4>HTML5 / CSS3</h4>
-                  <p>Semantic markup & modern styling</p>
-                </div>
-              </div>
-              <div class="skill-progress" data-skill-level="10">
-                <div class="progress-bar" style="width: 90%;">
-                  <span class="progress-label">90%</span>
-                </div>
-              </div>
-            </div>
-
-            <div class="skill-item" data-skill-level="70">
-              <div class="skill-step">
-                <div class="step-number">02</div>
-                <div class="step-content">
-                  <h4>JavaScript / jQuery</h4>
-                  <p>Interactive & dynamic functionality</p>
-                </div>
-              </div>
-              <div class="skill-progress">
-                <div class="progress-bar" style="width: 70%">
-                  <span class="progress-label">70%</span>
-                </div>
-              </div>
-            </div>
-
-            <div class="skill-item" data-skill-level="88">
-              <div class="skill-step">
-                <div class="step-number">03</div>
-                <div class="step-content">
-                  <h4>Bootstrap</h4>
-                  <p>Responsive grid & components</p>
-                </div>
-              </div>
-              <div class="skill-progress">
-                <div class="progress-bar" style="width: 90%">
-                  <span class="progress-label">90%</span>
-                </div>
-              </div>
-            </div>
-
-            <div class="skill-item" data-skill-level="70">
-              <div class="skill-step">
-                <div class="step-number">04</div>
-                <div class="step-content">
-                  <h4>Tailwind CSS</h4>
-                  <p>Utility-first styling framework</p>
-                </div>
-              </div>
-              <div class="skill-progress">
-                <div class="progress-bar" style="width: 70%">
-                  <span class="progress-label">70%</span>
-                </div>
-              </div>
-            </div>
-
-            <div class="skill-item" data-skill-level="90">
-              <div class="skill-step">
-                <div class="step-number">05</div>
-                <div class="step-content">
-                  <h4>Responsive Design</h4>
-                  <p>Mobile-first & adaptive layouts</p>
-                </div>
-              </div>
-              <div class="skill-progress">
-                <div class="progress-bar" style="width: 90%">
-                  <span class="progress-label">90%</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="skill-category">
-          <div class="category-header">
-            <div class="category-icon">
-              <i class="fab fa-wordpress"></i>
-            </div>
-            <h2>WordPress Development</h2>
-            <p>Custom themes & high-performance sites</p>
-          </div>
-
-          <div class="skills-timeline">
-            <div class="skill-item" data-skill-level="90">
-              <div class="skill-step">
-                <div class="step-number">01</div>
-                <div class="step-content">
-                  <h4>Theme Development</h4>
-                  <p>Custom & child theme creation</p>
-                </div>
-              </div>
-              <div class="skill-progress">
-                <div class="progress-bar" style="width: 90%">
-                  <span class="progress-label">90%</span>
-                </div>
-              </div>
-            </div>
-
-            <div class="skill-item" data-skill-level="80">
-              <div class="skill-step">
-                <div class="step-number">02</div>
-                <div class="step-content">
-                  <h4>Plugin Development</h4>
-                  <p>Custom functionality & extensions</p>
-                </div>
-              </div>
-              <div class="skill-progress">
-                <div class="progress-bar" style="width: 80%">
-                  <span class="progress-label">80%</span>
-                </div>
-              </div>
-            </div>
-
-            <div class="skill-item" data-skill-level="90">
-              <div class="skill-step">
-                <div class="step-number">03</div>
-                <div class="step-content">
-                  <h4>WooCommerce</h4>
-                  <p>E-commerce setup & optimization</p>
-                </div>
-              </div>
-              <div class="skill-progress">
-                <div class="progress-bar" style="width: 90%">
-                  <span class="progress-label">90%</span>
-                </div>
-              </div>
-            </div>
-
-            <div class="skill-item" data-skill-level="70">
-              <div class="skill-step">
-                <div class="step-number">04</div>
-                <div class="step-content">
-                  <h4>Performance Optimization</h4>
-                  <p>Speed tuning & optimization</p>
-                </div>
-              </div>
-              <div class="skill-progress">
-                <div class="progress-bar" style="width: 70%">
-                  <span class="progress-label">70%</span>
-                </div>
-              </div>
-            </div>
-
-            <div class="skill-item" data-skill-level="80">
-              <div class="skill-step">
-                <div class="step-number">05</div>
-                <div class="step-content">
-                  <h4>SEO Best Practices</h4>
-                  <p>On-page & technical optimization</p>
-                </div>
-              </div>
-              <div class="skill-progress">
-                <div class="progress-bar" style="width: 80%">
-                  <span class="progress-label">80%</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
     <!-- ---------------------------skills section end---------------------------- -->
     <section class="about-section" id="about-me">
-      <div class="word-row-section word-row-white"><span>who i'm</span></div>
+
+      <h3 class="about-title">WHO I'M</h3>
       <div class="about-container">
 
         <div class="about-left-section">
@@ -734,7 +554,7 @@
             </div>
             <div class="profile-stats">
               <div class="stat-item">
-                <h4>4+</h4>
+                <h4>2+</h4>
                 <p>Projects</p>
               </div>
               <div class="stat-item">
@@ -742,7 +562,7 @@
                 <p>Years</p>
               </div>
               <div class="stat-item">
-                <h4>10+</h4>
+                <h4>8+</h4>
                 <p>Websites Built</p>
               </div>
             </div>
@@ -752,7 +572,7 @@
                 target="_blank" rel="noopener noreferrer">
                 <i class="fa-solid fa-download"></i>Download CV
               </a>
-              <a href="https://hbwebcraft@gmail.com" target="_blank" rel="noopener noreferrer" class="btn-consultation">
+              <a href="https://hbwebcraft@gmail.com" target="_blank" rel="noopener noreferrer" class="btn-consultation btn-right-move ">
                 <i class="fa-brands fa-first-order"></i> order now
               </a>
             </div>
@@ -785,89 +605,25 @@
         <!-- --------------------------------------------------left section end----------------------------  -->
         <div class="about-right-section">
           <div class="about-right-content">
-            <!-- <div class="about-me"> About Me</div> -->
+        
             <h1>
               Crafting modern ideas into fast, user-focused digital experiences.
             </h1>
             <p>
-              I’m a passionate frontend developer and WordPress specialist
-              dedicated to building modern, high performance websites that
-              deliver real results. I focus on creating responsive, visually
-              engaging interfaces using HTML, CSS, JavaScript, Tailwind, and
-              Bootstrap that ensuring every experience is smooth, fast, and
-              user friendly across all devices.
-            </p>
-            <p>
-              With strong expertise in WordPress, I develop child themes,
-              handle theme or plugin customization, and optimize performance to build
-              scalable and easy to manage websites. My goal is not just to
-              create websites, but to craft digital solutions that align with
-              business objectives and provide long term value.
-            </p>
-            <p>
-              I’m also continuously improving my skills in UI/UX design and SEO,
-              understanding how users interact with digital products and how
-              websites can perform better in search engines. This allows me to
-              build experiences that are not only visually appealing but also
-              strategic and resultdriven.
-            </p>
-            <p>
-              I believe in clean code, continuous learning, and solving
-              real-world problems through thoughtful design and development.
-              Every project I work on is an opportunity to create something
-              meaningful, functional, and future-ready.
+              I’m a Frontend Developer and WordPress Specialist focused on building responsive, high-performance
+              websites that deliver practical business value. I develop clean, scalable interfaces using HTML, CSS,
+              JavaScript, Tailwind CSS, and Bootstrap, ensuring a seamless experience across all devices.
+
+              On the WordPress side, I work with theme and plugin customization, child theme development, WooCommerce
+              customization, and custom post types to create flexible and easy-to-manage solutions tailored to client
+              needs.
+
+              Currently, I’m expanding toward full-stack development, strengthening my backend skills to deliver more
+              complete and efficient web solutions. I prioritize clean code, performance optimization, and long-term
+              maintainability in every project.
             </p>
           </div>
-          <div class="details-grid">
-            <div class="detail-item" data-aos="fade-up" data-aos-delay="250">
-              <i class="fa-solid fa-briefcase"></i>
-              <div class="detail-content">
-                <span>Experience</span>
-                <strong>2+ Years</strong>
-              </div>
-            </div>
-
-            <div class="detail-item" data-aos="fade-up" data-aos-delay="300">
-              <i class="fa-solid fa-graduation-cap"></i>
-              <div class="detail-content">
-                <span>Degree</span>
-                <strong>Software Engineering (BSSE)</strong>
-              </div>
-            </div>
-
-            <div class="detail-item" data-aos="fade-up" data-aos-delay="350">
-              <i class="fa-solid fa-location-arrow"></i>
-              <div class="detail-content">
-                <span>Based In</span>
-                <strong> Narowal ,Pakistan</strong>
-              </div>
-            </div>
-
-            <div class="detail-item" data-aos="fade-up" data-aos-delay="100">
-              <i class="fa-solid fa-envelope"></i>
-
-              <div class="detail-content">
-                <span>Email</span>
-                <strong>hbwebcraft@gmail.com</strong>
-              </div>
-            </div>
-
-            <div class="detail-item" data-aos="fade-up" data-aos-delay="150">
-              <i class="fa-solid fa-phone"></i>
-              <div class="detail-content">
-                <span>Phone</span>
-                <strong>+9244-2005467</strong>
-              </div>
-            </div>
-
-            <div class="detail-item" data-aos="fade-up" data-aos-delay="200">
-              <i class="fa-solid fa-calendar"></i>
-              <div class="detail-content">
-                <span>Availability</span>
-                <strong>Open to Work</strong>
-              </div>
-            </div>
-          </div>
+       
           <div class="end-of-right-about">
             <h1>Let’s build something impactful together.</h1>
           </div>
@@ -876,8 +632,7 @@
     </section>
     <!-- ---------------------------work experience & education section start---------------------------- -->
     <section class="experience-education-section sections-pd bg-black">
-      <div class="word-row-section word-row-white"><span>Journey</span></div>
-      <h3 class="about-title">My Journey</h3>
+      <h3 class="about-title ">My Journey</h3>
 
       <div class="experience-education-container">
         <!-- Work Experience -->
@@ -1018,11 +773,11 @@
     </section>
     <!-- ---------------------------work experience & education section end---------------------------- -->
 
-   
+
 
     <!-- ---------------------------how im working section start---------------------------- -->
     <section class="working-process-section sections-pd bg-black">
-      <div class="word-row-section word-row-white"><span>Prcess</span></div>
+
       <h3 class="about-title">How I'm Working</h3>
 
       <div class="process-container">
@@ -1177,7 +932,6 @@
     <!-- ---------------------------how im working section end---------------------------- -->
 
     <section class="contact-section sections-pd bg-black">
-      <div class="word-row-section word-row-white"><span>Contact</span></div>
 
       <!-- Contact Tagline -->
       <div class="contact-tagline">
@@ -1243,7 +997,7 @@
           </div>
 
           <!-- Social Links -->
-          <div class="contact-social">
+          <!-- <div class="contact-social">
             <h4>Follow Me</h4>
             <div class="social-icons">
               <a href="https://github.com/HbWebForge/hb-portfolio" target="_blank" class="social-icon github"
@@ -1274,7 +1028,7 @@
                 </svg>
               </a>
             </div>
-          </div>
+          </div> -->
         </div>
 
         <!-- Contact Form Section -->

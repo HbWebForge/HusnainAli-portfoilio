@@ -1,108 +1,87 @@
+// ========================= NAVBAR FUNCTIONALITY =========================
+document.addEventListener('DOMContentLoaded', function () {
+  const hamburgerMenu = document.getElementById('hamburgerMenu');
+  const navMenu = document.getElementById('navMenu');
+  const navLinks = document.querySelectorAll('.nav-link');
 
-window.addEventListener("load", function () {
-  const loading = document.querySelector(".loading");
-  const welcome = document.querySelector(".welcome");
-  const preloader = document.getElementById("preloader");
-
-  // Step 1: Loading complete → switch text
-  setTimeout(() => {
-    loading.classList.remove("active");
-    loading.style.display = "none";
-
-    welcome.style.display = "block";
-    welcome.classList.add("active");
-
-
-  }, 4000);
-
-
-  // Step 2: Remove preloader
-  setTimeout(() => {
-    preloader.classList.add("fade-out");
-
-    setTimeout(() => {
-      preloader.style.display = "none";
-    }, 2000);
-
-  }, 7000);
-});
-
-const btn = document.getElementById("menuBtn");
-const overlay = document.getElementById("menuOverlay");
-
-btn.addEventListener("click", () => {
-  btn.classList.toggle("active");
-  overlay.classList.toggle("active");
-});
-// -------------------------------------slideshow----------
-
-const slides = document.querySelectorAll(".slide");
-let index = 0;
-
-function showSlide(i) {
-  slides.forEach(slide => slide.classList.remove("active"));
-  slides[i].classList.add("active");
-}
-
-document.getElementById("next").onclick = () => {
-  index = (index + 1) % slides.length;
-  showSlide(index);
-};
-
-document.getElementById("prev").onclick = () => {
-  index = (index - 1 + slides.length) % slides.length;
-  showSlide(index);
-};
-
-/* Auto slide */
-setInterval(() => {
-  index = (index + 1) % slides.length;
-  showSlide(index);
-}, 5000);
-
-// ============================================ VERTICAL TABS FUNCTIONALITY ============================================
-
-// Get all vertical tab buttons and content
-const vTabButtons = document.querySelectorAll(".vtab");
-const vTabContents = document.querySelectorAll(".vcontent");
-
-// Add click event listener to each tab button
-vTabButtons.forEach(button => {
-  button.addEventListener("click", () => {
-    const tabName = button.getAttribute("data-vtab");
-
-    // Remove active class from all buttons
-    vTabButtons.forEach(btn => btn.classList.remove("active"));
-    
-    // Add active class to clicked button
-    button.classList.add("active");
-
-    // Remove active class from all content
-    vTabContents.forEach(content => content.classList.remove("active"));
-
-    // Show corresponding content
-    const activeContent = document.getElementById(tabName);
-    if (activeContent) {
-      activeContent.classList.add("active");
-    }
+  // Hamburger menu toggle
+  hamburgerMenu.addEventListener('click', function () {
+    hamburgerMenu.classList.toggle('active');
+    navMenu.classList.toggle('active');
   });
-});
 
-// Optional: Add keyboard navigation (arrow keys)
-document.addEventListener("keydown", (e) => {
-  const activeTab = document.querySelector(".vtab.active");
-  const tabIndex = Array.from(vTabButtons).indexOf(activeTab);
+  // Close menu when nav link is clicked
+  navLinks.forEach(link => {
+    link.addEventListener('click', function (e) {
+      hamburgerMenu.classList.remove('active');
+      navMenu.classList.remove('active');
+      
+      // Update active link
+      navLinks.forEach(l => l.classList.remove('active'));
+      this.classList.add('active');
+    });
+  });
 
-  if (e.key === "ArrowDown" || e.key === "ArrowRight") {
-    e.preventDefault();
-    const nextIndex = (tabIndex + 1) % vTabButtons.length;
-    vTabButtons[nextIndex].click();
-  } else if (e.key === "ArrowUp" || e.key === "ArrowLeft") {
-    e.preventDefault();
-    const prevIndex = (tabIndex - 1 + vTabButtons.length) % vTabButtons.length;
-    vTabButtons[prevIndex].click();
+  // Update active link on scroll
+  window.addEventListener('scroll', function () {
+    let current = '';
+    
+    const sections = document.querySelectorAll('section, main > div');
+    sections.forEach(section => {
+      const sectionTop = section.offsetTop;
+      const sectionHeight = section.clientHeight;
+      if (pageYOffset >= sectionTop - 200) {
+        current = section.getAttribute('id');
+      }
+    });
+
+    navLinks.forEach(link => {
+      link.classList.remove('active');
+      if (link.getAttribute('href').slice(1) === current) {
+        link.classList.add('active');
+      }
+    });
+  });
+
+  // Set initial active link
+  const homeLink = document.querySelector('a[href="#home"]');
+  if (homeLink) {
+    homeLink.classList.add('active');
   }
 });
+
+// ========================= END NAVBAR FUNCTIONALITY =========================
+
+// ========================= EMAILJS INITIALIZATION =========================
+// Initialize EmailJS with your public key
+// Get your public key from: https://dashboard.emailjs.com/admin/account
+// Replace 'YOUR_PUBLIC_KEY' with your actual public key
+emailjs.init("iKEGL7sZnorJTpUM0"); // You need to set this up on EmailJS
+
+// ========================= END EMAILJS INITIALIZATION =========================
+
+// ========================= PRELOADER FUNCTIONALITY =========================
+// Simple, reliable preloader that shows for 2.5 seconds then fades out
+
+window.addEventListener("load", function () {
+  const preloader = document.getElementById("preloader");
+  
+  if (!preloader) return; // Safety check
+
+  // Wait 2.5 seconds, then start fade-out animation
+  setTimeout(() => {
+    preloader.classList.add("fade-out");
+    
+    // After fade-out completes, hide the preloader completely
+    setTimeout(() => {
+      preloader.style.display = "none";
+      // Optional: Remove from DOM entirely
+      preloader.remove();
+    }, 600); // Match CSS transition duration
+  }, 2500); // Show for 2.5 seconds
+});
+
+// ========================= END PRELOADER FUNCTIONALITY =========================
 
 // ============================================ PROJECTS FILTER FUNCTIONALITY ============================================
 
@@ -131,6 +110,7 @@ filterButtons.forEach(button => {
         if (filter === "all" || category === filter) {
           card.classList.remove("hide");
           card.classList.add("show");
+          card.style.display = "block";
         } else {
           card.classList.remove("show");
           card.style.display = "none";
@@ -237,34 +217,59 @@ if (contactForm) {
     submitBtn.disabled = true;
     submitBtn.innerHTML = '<span>Sending...</span>';
 
-    // Simulate form submission (replace with actual endpoint)
-    setTimeout(() => {
-      // In production, send data to server
-      const formData = {
-        name: document.getElementById("name").value,
-        email: document.getElementById("email").value,
-        subject: document.getElementById("subject").value,
-        message: document.getElementById("message").value
-      };
+    // Get form data
+    const name = document.getElementById("name").value;
+    const email = document.getElementById("email").value;
+    const subject = document.getElementById("subject").value;
+    const message = document.getElementById("message").value;
 
-      console.log("Form Data:", formData);
-
-      // Show success message
-      showFormStatus("Message sent successfully! I'll get back to you soon.", "success");
-
+    // Send email using EmailJS
+    emailjs.send(
+      "service_96hbj6s",  // Replace with your EmailJS service ID
+      "template_wth4v7h", // Replace with your EmailJS template ID
+      {
+        to_email: "hbwebcraft@gmail.com", // Your email
+        from_name: name,
+        from_email: email,
+        subject: subject,
+        message: message
+      }
+    )
+    .then(function(response) {
+      // Show success message with WhatsApp option
+      showFormStatus(`✓ Message sent successfully, ${name}! I'll get back to you soon. You can also reach me on WhatsApp.`, "success");
+      
       // Reset form
       contactForm.reset();
-
+      
+      // Add WhatsApp button
+      const whatsappBtn = document.createElement('a');
+      whatsappBtn.href = 'https://wa.me/+923442005467?text=Hi%20Husnain!%20I%20just%20sent%20you%20a%20message%20through%20your%20portfolio.%20Let%20me%20know%20when%20you%20get%20a%20chance%20to%20review%20it!';
+      whatsappBtn.target = '_blank';
+      whatsappBtn.className = 'whatsapp-link';
+      whatsappBtn.innerHTML = '<i class="fab fa-whatsapp"></i> Chat on WhatsApp';
+      
+      const statusDiv = document.getElementById("formStatus");
+      const lineBreak = document.createElement('br');
+      statusDiv.appendChild(lineBreak);
+      statusDiv.appendChild(whatsappBtn);
+      
       // Reset button
       submitBtn.disabled = false;
       submitBtn.innerHTML = originalText;
 
-      // Hide success message after 5 seconds
+      // Hide success message after 10 seconds
       setTimeout(() => {
         formStatus.classList.remove("success");
         formStatus.style.display = "none";
-      }, 5000);
-    }, 1500);
+      }, 10000);
+    })
+    .catch(function(error) {
+      console.error("Email send failed:", error);
+      showFormStatus("Error sending message. Please try again or contact via WhatsApp.", "error");
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = originalText;
+    });
   });
 }
 
