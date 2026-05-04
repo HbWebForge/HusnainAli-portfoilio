@@ -53,10 +53,42 @@ document.addEventListener('DOMContentLoaded', function () {
 // ========================= END NAVBAR FUNCTIONALITY =========================
 
 // ========================= EMAILJS INITIALIZATION =========================
-// Initialize EmailJS with your public key
-// Get your public key from: https://dashboard.emailjs.com/admin/account
-// Replace 'YOUR_PUBLIC_KEY' with your actual public key
-emailjs.init("iKEGL7sZnorJTpUM0"); // You need to set this up on EmailJS
+// Dynamically load EmailJS library since file:// protocol blocks external scripts
+function loadEmailJS() {
+  return new Promise((resolve, reject) => {
+    // Check if EmailJS is already loaded
+    if (typeof emailjs !== 'undefined') {
+      emailjs.init("iKEGL7sZnorJTpUM0");
+      resolve();
+      return;
+    }
+
+    // Create and load the script
+    const script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/index.min.js';
+    script.type = 'text/javascript';
+    script.onload = function() {
+      if (typeof emailjs !== 'undefined') {
+        emailjs.init("iKEGL7sZnorJTpUM0");
+        console.log('✓ EmailJS loaded and initialized successfully');
+        resolve();
+      } else {
+        reject(new Error('EmailJS failed to load'));
+      }
+    };
+    script.onerror = function() {
+      reject(new Error('Failed to load EmailJS from CDN'));
+    };
+    document.head.appendChild(script);
+  });
+}
+
+// Load EmailJS when DOM is ready
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', loadEmailJS);
+} else {
+  loadEmailJS().catch(err => console.error('EmailJS error:', err));
+}
 
 // ========================= END EMAILJS INITIALIZATION =========================
 
@@ -198,6 +230,13 @@ if (contactForm) {
   contactForm.addEventListener("submit", (e) => {
     e.preventDefault();
 
+    // Check if EmailJS is loaded
+    if (typeof emailjs === 'undefined') {
+      showFormStatus("Email service is loading... Please try again in a moment.", "error");
+      console.error("EmailJS not loaded yet");
+      return;
+    }
+
     // Validate all fields
     let isValid = true;
     Object.keys(validation).forEach(fieldName => {
@@ -215,7 +254,7 @@ if (contactForm) {
     const submitBtn = contactForm.querySelector(".submit-btn");
     const originalText = submitBtn.innerHTML;
     submitBtn.disabled = true;
-    submitBtn.innerHTML = '<span>Sending...</span>';
+    submitBtn.innerHTML = '<span>📨 Message is sending...</span>';
 
     // Get form data
     const name = document.getElementById("name").value;
@@ -225,7 +264,7 @@ if (contactForm) {
 
     // Send email using EmailJS
     emailjs.send(
-      "service_96hbj6s;,",  // Replace with your EmailJS service ID
+      "service_96hbj6s",  // Replace with your EmailJS service ID
       "template_wth4v7h", // Replace with your EmailJS template ID
       {
         to_email: "hbwebcraft@gmail.com", // Your email
@@ -236,8 +275,8 @@ if (contactForm) {
       }
     )
     .then(function(response) {
-      // Show success message with WhatsApp option
-      showFormStatus(`✓ Message sent successfully, ${name}! I'll get back to you soon. You can also reach me on WhatsApp.`, "success");
+      // Show success message
+      showFormStatus(`✓ Your message is sent successfully, I'm responding quickly!`, "success");
       
       // Reset form
       contactForm.reset();
@@ -247,7 +286,7 @@ if (contactForm) {
       whatsappBtn.href = 'https://wa.me/+923442005467?text=Hi%20Husnain!%20I%20just%20sent%20you%20a%20message%20through%20your%20portfolio.%20Let%20me%20know%20when%20you%20get%20a%20chance%20to%20review%20it!';
       whatsappBtn.target = '_blank';
       whatsappBtn.className = 'whatsapp-link';
-      whatsappBtn.innerHTML = '<i class="fab fa-whatsapp"></i> Chat on WhatsApp';
+      whatsappBtn.innerHTML = '<i class="fab fa-whatsapp"></i> Connect on WhatsApp';
       
       const statusDiv = document.getElementById("formStatus");
       const lineBreak = document.createElement('br');
