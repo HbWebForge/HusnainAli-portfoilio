@@ -225,7 +225,7 @@ if (contactForm) {
 
     // Send email using EmailJS
     emailjs.send(
-      "service_96hbj6s",  // Replace with your EmailJS service ID
+      "service_96hbj6s;,",  // Replace with your EmailJS service ID
       "template_wth4v7h", // Replace with your EmailJS template ID
       {
         to_email: "hbwebcraft@gmail.com", // Your email
