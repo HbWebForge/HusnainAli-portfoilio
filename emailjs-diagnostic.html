@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EmailJS Diagnostic</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #1a1a1a;
+            color: #fff;
+        }
+        .container {
+            background: #2a2a2a;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #444;
+        }
+        h1 {
+            color: #4caf50;
+            margin-bottom: 20px;
+        }
+        .status-item {
+            margin: 15px 0;
+            padding: 10px;
+            background: #333;
+            border-left: 4px solid #f44336;
+            border-radius: 4px;
+        }
+        .status-item.success {
+            border-left-color: #4caf50;
+            background: rgba(76, 175, 80, 0.1);
+        }
+        .status-item.loading {
+            border-left-color: #ff9800;
+            background: rgba(255, 152, 0, 0.1);
+        }
+        .label {
+            font-weight: bold;
+            color: #90caf9;
+        }
+        .value {
+            margin-left: 10px;
+            color: #b0bec5;
+            font-family: monospace;
+        }
+        .test-btn {
+            background: #4caf50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        .test-btn:hover {
+            background: #45a049;
+        }
+        .log {
+            background: #1a1a1a;
+            border: 1px solid #444;
+            padding: 10px;
+            margin-top: 20px;
+            max-height: 300px;
+            overflow-y: auto;
+            font-family: monospace;
+            font-size: 12px;
+            color: #4caf50;
+        }
+        .log-line {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 EmailJS Diagnostic Tool</h1>
+        
+        <div id="statusContainer"></div>
+        
+        <button class="test-btn" onclick="testEmailJS()">Test EmailJS Loading</button>
+        <button class="test-btn" onclick="reloadPage()">Reload Page</button>
+        
+        <div class="log" id="logContainer"></div>
+    </div>
+
+    <script>
+        const logContainer = document.getElementById('logContainer');
+        const statusContainer = document.getElementById('statusContainer');
+        let logLines = [];
+
+        function addLog(message, type = 'info') {
+            const timestamp = new Date().toLocaleTimeString();
+            logLines.push({ timestamp, message, type });
+            console.log(`[${timestamp}] ${message}`);
+            updateLog();
+        }
+
+        function updateLog() {
+            logContainer.innerHTML = logLines.map(line => {
+                let color = '#4caf50';
+                if (line.type === 'error') color = '#f44336';
+                if (line.type === 'warning') color = '#ff9800';
+                return `<div class="log-line" style="color: ${color}">[${line.timestamp}] ${line.message}</div>`;
+            }).join('');
+            logContainer.scrollTop = logContainer.scrollHeight;
+        }
+
+        function addStatus(label, value, success = null) {
+            const statusDiv = document.createElement('div');
+            statusDiv.className = 'status-item';
+            if (success === true) statusDiv.classList.add('success');
+            if (success === false) statusDiv.classList.add('loading');
+            
+            statusDiv.innerHTML = `<span class="label">${label}:</span><span class="value">${value}</span>`;
+            statusContainer.appendChild(statusDiv);
+        }
+
+        function checkEnvironment() {
+            addLog('Checking environment...', 'info');
+            
+            addStatus('Window Object', typeof window !== 'undefined' ? 'Available' : 'Not Available', true);
+            addStatus('Document Object', typeof document !== 'undefined' ? 'Available' : 'Not Available', true);
+            addStatus('Network', navigator.onLine ? 'Online' : 'Offline', navigator.onLine);
+            
+            // Check if EmailJS is in window
+            const emailjsStatus = typeof emailjs !== 'undefined' ? 'Loaded ✓' : 'Not Loaded ✗';
+            addStatus('EmailJS Status', emailjsStatus, typeof emailjs !== 'undefined');
+            
+            addLog('Environment check complete', 'info');
+        }
+
+        function testEmailJS() {
+            addLog('Starting EmailJS test...', 'info');
+            
+            // Try to load EmailJS dynamically
+            const cdnUrls = [
+                'https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/index.min.js',
+                'https://unpkg.com/@emailjs/browser@3/dist/index.min.js',
+                'https://cdnjs.cloudflare.com/ajax/libs/emailjs-com/3.2.0/email.min.js'
+            ];
+
+            let urlIndex = 0;
+
+            function tryLoad(index) {
+                if (index >= cdnUrls.length) {
+                    addLog('All CDN URLs failed', 'error');
+                    addStatus('CDN Test Result', 'All URLs Failed', false);
+                    return;
+                }
+
+                const url = cdnUrls[index];
+                addLog(`Trying CDN ${index + 1}: ${url}`, 'info');
+                
+                const script = document.createElement('script');
+                script.src = url;
+                script.type = 'text/javascript';
+                script.async = true;
+                script.crossOrigin = 'anonymous';
+
+                script.onload = () => {
+                    addLog(`✓ Script loaded from: ${url}`, 'info');
+                    
+                    // Check if EmailJS is available
+                    if (typeof emailjs !== 'undefined') {
+                        addLog('✓ EmailJS is now available', 'info');
+                        addStatus('CDN Load Status', `Success - ${url}`, true);
+                        
+                        try {
+                            emailjs.init('iKEGL7sZnorJTpUM0');
+                            addLog('✓ EmailJS initialized', 'info');
+                            addStatus('EmailJS Init', 'Success ✓', true);
+                        } catch (e) {
+                            addLog(`✗ EmailJS init failed: ${e.message}`, 'error');
+                            addStatus('EmailJS Init', 'Failed', false);
+                        }
+                    } else {
+                        addLog('Script loaded but EmailJS not available', 'warning');
+                        setTimeout(() => tryLoad(index + 1), 1000);
+                    }
+                };
+
+                script.onerror = (error) => {
+                    addLog(`✗ Failed to load: ${url}`, 'error');
+                    addLog(`Error: ${error}`, 'error');
+                    tryLoad(index + 1);
+                };
+
+                document.head.appendChild(script);
+            }
+
+            tryLoad(0);
+        }
+
+        function reloadPage() {
+            location.reload();
+        }
+
+        // Run initial checks
+        window.addEventListener('load', () => {
+            addLog('Page loaded', 'info');
+            checkEnvironment();
+        });
+
+        // Also check immediately in case page is already loaded
+        if (document.readyState === 'complete') {
+            addLog('Page was already loaded', 'info');
+            checkEnvironment();
+        }
+    </script>
+</body>
+</html>

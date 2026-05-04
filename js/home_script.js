@@ -53,41 +53,109 @@ document.addEventListener('DOMContentLoaded', function () {
 // ========================= END NAVBAR FUNCTIONALITY =========================
 
 // ========================= EMAILJS INITIALIZATION =========================
-// Dynamically load EmailJS library since file:// protocol blocks external scripts
+// Global promise to track EmailJS loading status
+let emailjsLoadingPromise = null;
+let emailjsLoaded = false;
+
+// Dynamically load EmailJS library with fallback CDNs
 function loadEmailJS() {
-  return new Promise((resolve, reject) => {
+  // Return existing promise if already loading
+  if (emailjsLoadingPromise) {
+    return emailjsLoadingPromise;
+  }
+
+  emailjsLoadingPromise = new Promise((resolve, reject) => {
     // Check if EmailJS is already loaded
     if (typeof emailjs !== 'undefined') {
-      emailjs.init("iKEGL7sZnorJTpUM0");
-      resolve();
-      return;
+      try {
+        emailjs.init("iKEGL7sZnorJTpUM0");
+        emailjsLoaded = true;
+        console.log('✓ EmailJS already loaded and initialized');
+        resolve();
+        return;
+      } catch (e) {
+        console.error('EmailJS init error:', e);
+      }
     }
 
-    // Create and load the script
-    const script = document.createElement('script');
-    script.src = 'https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/index.min.js';
-    script.type = 'text/javascript';
-    script.onload = function() {
-      if (typeof emailjs !== 'undefined') {
-        emailjs.init("iKEGL7sZnorJTpUM0");
-        console.log('✓ EmailJS loaded and initialized successfully');
-        resolve();
-      } else {
-        reject(new Error('EmailJS failed to load'));
+    // List of CDN sources to try
+    const cdnSources = [
+      'https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/index.min.js',
+      'https://unpkg.com/@emailjs/browser@3/dist/index.min.js',
+      'https://cdnjs.cloudflare.com/ajax/libs/emailjs-com/3.2.0/email.min.js'
+    ];
+
+    let attemptIndex = 0;
+
+    function tryLoadFromCDN(index) {
+      if (index >= cdnSources.length) {
+        console.error('❌ Failed to load EmailJS from all CDN sources');
+        reject(new Error('Failed to load EmailJS from all CDN sources'));
+        return;
       }
-    };
-    script.onerror = function() {
-      reject(new Error('Failed to load EmailJS from CDN'));
-    };
-    document.head.appendChild(script);
+
+      console.log(`📦 Attempting to load EmailJS from: ${cdnSources[index]}`);
+      
+      const script = document.createElement('script');
+      script.src = cdnSources[index];
+      script.type = 'text/javascript';
+      script.async = true;
+      script.crossOrigin = 'anonymous';
+      
+      script.onload = function() {
+        console.log(`📦 Script loaded from: ${cdnSources[index]}`);
+        // Wait a moment for script to execute
+        const checkInterval = setInterval(() => {
+          if (typeof emailjs !== 'undefined') {
+            clearInterval(checkInterval);
+            try {
+              emailjs.init("iKEGL7sZnorJTpUM0");
+              emailjsLoaded = true;
+              console.log(`✓ EmailJS initialized successfully from: ${cdnSources[index]}`);
+              resolve();
+            } catch (e) {
+              console.error('EmailJS init failed:', e);
+              tryLoadFromCDN(index + 1);
+            }
+          }
+        }, 50);
+        
+        // Timeout after 2 seconds
+        setTimeout(() => {
+          clearInterval(checkInterval);
+          if (!emailjsLoaded) {
+            console.warn(`Timeout waiting for EmailJS from ${cdnSources[index]}, trying next...`);
+            tryLoadFromCDN(index + 1);
+          }
+        }, 2000);
+      };
+      
+      script.onerror = function(error) {
+        console.warn(`⚠️ Failed to load from CDN ${index + 1}: ${cdnSources[index]}`);
+        console.warn(`Error: ${error}`);
+        tryLoadFromCDN(index + 1);
+      };
+      
+      document.head.appendChild(script);
+    }
+
+    // Start trying CDN sources
+    tryLoadFromCDN(0);
   });
+
+  return emailjsLoadingPromise;
 }
 
 // Load EmailJS when DOM is ready
+console.log('Loading EmailJS initialization script...');
 if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', loadEmailJS);
+  document.addEventListener('DOMContentLoaded', () => {
+    console.log('DOM Content Loaded - Starting EmailJS load...');
+    loadEmailJS();
+  });
 } else {
-  loadEmailJS().catch(err => console.error('EmailJS error:', err));
+  console.log('DOM already loaded - Starting EmailJS load...');
+  loadEmailJS().catch(err => console.error('EmailJS loading failed:', err));
 }
 
 // ========================= END EMAILJS INITIALIZATION =========================
@@ -230,14 +298,7 @@ if (contactForm) {
   contactForm.addEventListener("submit", (e) => {
     e.preventDefault();
 
-    // Check if EmailJS is loaded
-    if (typeof emailjs === 'undefined') {
-      showFormStatus("Email service is loading... Please try again in a moment.", "error");
-      console.error("EmailJS not loaded yet");
-      return;
-    }
-
-    // Validate all fields
+    // Validate all fields first
     let isValid = true;
     Object.keys(validation).forEach(fieldName => {
       if (!validateField(fieldName)) {
@@ -262,23 +323,85 @@ if (contactForm) {
     const subject = document.getElementById("subject").value;
     const message = document.getElementById("message").value;
 
-    // Send email using EmailJS
-    emailjs.send(
-      "service_96hbj6s",  // Replace with your EmailJS service ID
-      "template_wth4v7h", // Replace with your EmailJS template ID
-      {
-        to_email: "hbwebcraft@gmail.com", // Your email
-        from_name: name,
-        from_email: email,
-        subject: subject,
-        message: message
-      }
-    )
-    .then(function(response) {
-      // Show success message
+    // Wait for EmailJS to load, then send email
+    emailjsLoadingPromise.then(() => {
+      // EmailJS is ready, send the email
+      emailjs.send(
+        "service_96hbj6s",  // Replace with your EmailJS service ID
+        "template_wth4v7h", // Replace with your EmailJS template ID
+        {
+          to_email: "hbwebcraft@gmail.com", // Your email
+          from_name: name,
+          from_email: email,
+          subject: subject,
+          message: message
+        }
+      )
+      .then(function(response) {
+        // Show success message
+        showFormStatus(`✓ Your message is sent successfully, I'm responding quickly!`, "success");
+        
+        // Reset form
+        contactForm.reset();
+        
+        // Add WhatsApp button
+        const whatsappBtn = document.createElement('a');
+        whatsappBtn.href = 'https://wa.me/+923442005467?text=Hi%20Husnain!%20I%20just%20sent%20you%20a%20message%20through%20your%20portfolio.%20Let%20me%20know%20when%20you%20get%20a%20chance%20to%20review%20it!';
+        whatsappBtn.target = '_blank';
+        whatsappBtn.className = 'whatsapp-link';
+        whatsappBtn.innerHTML = '<i class="fab fa-whatsapp"></i> Connect on WhatsApp';
+        
+        const statusDiv = document.getElementById("formStatus");
+        const lineBreak = document.createElement('br');
+        statusDiv.appendChild(lineBreak);
+        statusDiv.appendChild(whatsappBtn);
+        
+        // Reset button
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = originalText;
+
+        // Hide success message after 10 seconds
+        setTimeout(() => {
+          formStatus.classList.remove("success");
+          formStatus.style.display = "none";
+        }, 10000);
+      })
+      .catch(function(error) {
+        console.error("Email send failed:", error);
+        showFormStatus("Error sending message. Please try again or contact via WhatsApp.", "error");
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = originalText;
+      });
+    }).catch(function(error) {
+      // EmailJS failed to load - Use fallback method
+      console.error("EmailJS not available, using fallback method:", error);
+      sendEmailVisFallback(name, email, subject, message, submitBtn, originalText);
+    });
+  });
+}
+
+// ========================= FALLBACK EMAIL METHOD =========================
+// Use FormSubmit.co as fallback if EmailJS fails
+function sendEmailVisFallback(name, email, subject, message, submitBtn, originalText) {
+  console.log('Using FormSubmit fallback method...');
+  
+  const formData = new FormData();
+  formData.append('name', name);
+  formData.append('email', email);
+  formData.append('subject', subject);
+  formData.append('message', message);
+  formData.append('_template', 'table');
+  formData.append('_next', window.location.href);
+
+  fetch('https://formsubmit.co/ajax/hbwebcraft@gmail.com', {
+    method: 'POST',
+    body: formData
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.success) {
+      console.log('✓ Message sent via fallback method');
       showFormStatus(`✓ Your message is sent successfully, I'm responding quickly!`, "success");
-      
-      // Reset form
       contactForm.reset();
       
       // Add WhatsApp button
@@ -293,24 +416,25 @@ if (contactForm) {
       statusDiv.appendChild(lineBreak);
       statusDiv.appendChild(whatsappBtn);
       
-      // Reset button
       submitBtn.disabled = false;
       submitBtn.innerHTML = originalText;
 
-      // Hide success message after 10 seconds
       setTimeout(() => {
         formStatus.classList.remove("success");
         formStatus.style.display = "none";
       }, 10000);
-    })
-    .catch(function(error) {
-      console.error("Email send failed:", error);
-      showFormStatus("Error sending message. Please try again or contact via WhatsApp.", "error");
-      submitBtn.disabled = false;
-      submitBtn.innerHTML = originalText;
-    });
+    } else {
+      throw new Error('FormSubmit failed');
+    }
+  })
+  .catch(error => {
+    console.error("Fallback method failed:", error);
+    showFormStatus("Error sending message. Please contact via WhatsApp instead.", "error");
+    submitBtn.disabled = false;
+    submitBtn.innerHTML = originalText;
   });
 }
+
 
 // Show form status message
 function showFormStatus(message, type) {
