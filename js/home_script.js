@@ -178,7 +178,7 @@ window.addEventListener("load", function () {
       // Optional: Remove from DOM entirely
       preloader.remove();
     }, 600); // Match CSS transition duration
-  }, 2500); // Show for 2.5 seconds
+  }, 1500); // Show for 1.5 seconds
 });
 
 // ========================= END PRELOADER FUNCTIONALITY =========================
