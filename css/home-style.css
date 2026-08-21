@@ -1020,7 +1020,7 @@ body {
 /* Projects Grid */
 .projects-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 30px;
   margin-bottom: 80px;
 }
@@ -1028,7 +1028,7 @@ body {
 /* 3D Flip Card */
 .project-card {
   perspective: 1000px;
-  height: 380px;
+  height: 400px;
   cursor: pointer;
 }
 
@@ -1127,7 +1127,7 @@ body {
 
 .project-overlay h4 {
   font-size: 1.3rem;
-  margin-bottom: 8px;
+  margin-bottom: 14px;
   text-transform: uppercase;
   font-weight: 700;
   letter-spacing: 1px;
